@@ -1,0 +1,43 @@
+---
+import { getEntry, getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import EventCard from '../components/EventCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const page = (await getEntry('pages', 'events'))!;
+const today = new Date(); today.setUTCHours(0, 0, 0, 0);
+const all = await getCollection('events');
+const upcoming = all.filter((e) => e.data.date >= today).sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+const past = all.filter((e) => e.data.date < today).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const rendered = new Map(await Promise.all(all.map(async (e) => [e.id, (await render(e)).Content] as const)));
+---
+<Base title={page.data.title} description={page.data.subtitle}>
+  <PageHero eyebrow="Events" title={page.data.title} subtitle={page.data.subtitle} />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">Upcoming</span><h2>Mark your calendar</h2></div>
+      {upcoming.length === 0 && <p class="lead">No upcoming events right now. Follow us on Facebook to be the first to know.</p>}
+      <div class="grid">
+        {upcoming.map((e) => { const C = rendered.get(e.id)!; return <EventCard {...e.data}><C /></EventCard>; })}
+      </div>
+    </div>
+  </section>
+
+  {past.length > 0 && (
+    <section class="section section--blush">
+      <div class="container">
+        <div class="section-head"><span class="eyebrow">Recent</span><h2>Past events</h2></div>
+        <div class="grid">
+          {past.map((e) => { const C = rendered.get(e.id)!; return <EventCard past {...e.data}><C /></EventCard>; })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBand title="Annual calendar" text="Nomination Celebration in August · Women of the Year Banquet on the third Thursday of October · Legacy Celebration in March.">
+    <a class="btn btn--light" href="/nominate">Nominate</a>
+    <a class="btn btn--coral" href="/be-a-sponsor">Sponsor</a>
+  </CtaBand>
+</Base>

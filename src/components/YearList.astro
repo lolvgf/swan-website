@@ -1,0 +1,28 @@
+---
+/* Lista de personas agrupada por año (ganadoras, becarias). */
+import HonoreeCard from './HonoreeCard.astro';
+import { groupByYear } from '../lib/site';
+interface Props { items: { data: { name: string; year: number; category?: string; title?: string; photo?: string; award?: string; note?: string } }[]; showAward?: boolean }
+const { items, showAward = false } = Astro.props;
+const groups = groupByYear(items);
+---
+<div class="years">
+  {groups.map(([year, list]) => (
+    <section class="year" id={`y${year}`}>
+      <h3 class="year__label">{year}</h3>
+      <div class="year__grid">
+        {list.map((h) => <HonoreeCard compact showYear={false} showAward={showAward && h.data.award !== 'woman-of-the-year'} {...h.data} />)}
+      </div>
+      {list.find((h) => h.data.note) && <p class="year__note">* {list.find((h) => h.data.note)!.data.note}</p>}
+    </section>
+  ))}
+</div>
+
+<style>
+  .years { display: grid; gap: 2rem; }
+  .year { display: grid; grid-template-columns: 90px 1fr; gap: 1.2rem; align-items: start; }
+  .year__label { font-size: 1.6rem; color: var(--berry); margin: 0.4rem 0 0; position: sticky; top: 96px; }
+  .year__grid { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+  .year__note { grid-column: 2; font-size: 0.85rem; color: var(--muted); margin: 0; }
+  @media (max-width: 600px) { .year { grid-template-columns: 1fr; gap: 0.6rem; } .year__label { position: static; } .year__note { grid-column: 1; } }
+</style>

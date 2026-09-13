@@ -1,0 +1,21 @@
+---
+/* Franja de llamada a la acción (color ciruela) reutilizable. */
+interface Props { title: string; text?: string }
+const { title, text } = Astro.props;
+---
+<section class="band">
+  <div class="container band__inner">
+    <div>
+      <h2>{title}</h2>
+      {text && <p class="lead">{text}</p>}
+    </div>
+    <div class="btn-row"><slot /></div>
+  </div>
+</section>
+
+<style>
+  .band { background: linear-gradient(120deg, var(--plum), var(--berry-deep) 60%, var(--berry)); color: #fff; padding-block: clamp(3rem, 6vw, 4.5rem); }
+  .band__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem 3rem; }
+  .band h2 { color: #fff; margin-bottom: 0.4rem; }
+  .band .lead { color: #f6dbe7; margin: 0; }
+</style>

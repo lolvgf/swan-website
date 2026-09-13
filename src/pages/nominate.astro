@@ -1,0 +1,54 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { getSite } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'nominate'))!;
+const { Content } = await render(page);
+
+const awards = [
+  { name: 'Woman of the Year', href: '/women-of-the-year', text: 'Demonstrates excellence in one or more of: Professional Achievement, Mentorship of Women, Community Engagement, or Transformative Leadership.' },
+  { name: 'Rising Swan', href: '/rising-swan', text: 'Emerging and growing in her professional achievement, mentorship of women, community engagement, and transformative leadership endeavors.' },
+  { name: 'Lifetime Achievement', href: '/lifetime-achievement', text: 'Has dedicated her life to her professional achievements, mentorship of women, community engagement activities, and transformative leadership endeavors.' },
+];
+---
+<Base title={page.data.title} description={page.data.subtitle}>
+  <PageHero eyebrow="Nominations" title={page.data.title} subtitle={page.data.subtitle}>
+    <div class="btn-row">
+      <a class="btn btn--primary" href={site.nominationFormEn} target="_blank" rel="noopener">Nomination form (English)</a>
+      {site.nominationFormEs && <a class="btn btn--outline" href={site.nominationFormEs} target="_blank" rel="noopener">Formulario de nominación (Español)</a>}
+    </div>
+    {site.nominationsOpen && site.nominationsDeadline && <p class="deadline">Nominations for this year's awards are open until <strong>{site.nominationsDeadline}</strong>. Late nominations roll over to the following year.</p>}
+  </PageHero>
+
+  <section class="section section--tight">
+    <div class="container">
+      <div class="grid grid--3">
+        {awards.map((a) => (
+          <a class="card card--link" href={a.href}>
+            <span class="pill">Award</span>
+            <h3>{a.name}</h3>
+            <p>{a.text}</p>
+            <p><strong>About this award →</strong></p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="prose"><Content /></div>
+      <div class="btn-row mt-3">
+        <a class="btn btn--primary" href={site.nominationFormEn} target="_blank" rel="noopener">Submit a nomination</a>
+        {site.nominationFormEs && <a class="btn btn--outline" href={site.nominationFormEs} target="_blank" rel="noopener">Nominar en español</a>}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .deadline { margin-top: 1.4rem; color: var(--muted); font-size: 0.95rem; }
+</style>

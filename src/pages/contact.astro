@@ -1,0 +1,41 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { getSite } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'contact'))!;
+const { Content } = await render(page);
+---
+<Base title={page.data.title} description={page.data.subtitle} image={page.data.heroImage}>
+  <PageHero eyebrow="Contact" title={page.data.title} subtitle={page.data.subtitle} image={page.data.heroImage} />
+
+  <section class="section">
+    <div class="container split">
+      <div class="prose"><Content /></div>
+      <div class="grid grid--2">
+        <div class="card">
+          <div class="card__icon">@</div>
+          <h3>Email</h3>
+          <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        </div>
+        <div class="card">
+          <div class="card__icon">✉</div>
+          <h3>Mailing address</h3>
+          <p>{site.fullName}<br />{site.mailingAddress.split('\n').map((l, i) => <>{i > 0 && <br />}{l}</>)}</p>
+        </div>
+        <div class="card">
+          <div class="card__icon">f</div>
+          <h3>Facebook</h3>
+          <p><a href={site.facebook} target="_blank" rel="noopener">@SkagitSWAN</a></p>
+        </div>
+        <div class="card">
+          <div class="card__icon">in</div>
+          <h3>LinkedIn</h3>
+          <p><a href={site.linkedin} target="_blank" rel="noopener">Skagit Women's Alliance and Network</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

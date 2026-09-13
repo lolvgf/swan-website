@@ -1,0 +1,67 @@
+---
+import { getEntry, getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { initials } from '../lib/site';
+
+const page = (await getEntry('pages', 'about'))!;
+const { Content } = await render(page);
+const board = (await getCollection('board')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title={page.data.title} description={page.data.subtitle} image={page.data.heroImage}>
+  <PageHero eyebrow="About" title={page.data.title} subtitle={page.data.subtitle} image={page.data.heroImage} />
+
+  <section class="section">
+    <div class="container split">
+      <div class="prose"><Content /></div>
+      <div class="timeline">
+        <div class="tl"><span class="tl__y">1984</span><p>SWAN is formed to recognize and support women of achievement in Skagit County.</p></div>
+        <div class="tl"><span class="tl__y">1985</span><p>Carol Pritchard Jelinek becomes the first SWAN Woman of the Year.</p></div>
+        <div class="tl"><span class="tl__y">2005</span><p>The SWAN Scholarship awards its first recipient.</p></div>
+        <div class="tl"><span class="tl__y">2014</span><p>The Rising Swan award is created to celebrate emerging leaders.</p></div>
+        <div class="tl"><span class="tl__y">2024</span><p>SWAN celebrates its 40th anniversary with the first Legacy Celebration.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--blush">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Leadership</span>
+        <h2>Board of Directors</h2>
+        <p class="lead">The SWAN board is made up of volunteers from a wide variety of backgrounds who share one goal: lifting up the women of Skagit Valley.</p>
+      </div>
+      <div class="grid grid--4">
+        {board.map((m) => (
+          <article class="member">
+            <div class="member__photo">
+              {m.data.photo ? <img src={m.data.photo} alt={m.data.name} loading="lazy" /> : <span>{initials(m.data.name)}</span>}
+            </div>
+            <h3>{m.data.name}</h3>
+            <p>{m.data.role}</p>
+          </article>
+        ))}
+      </div>
+      <p class="mt-2">Interested in joining the board? <a href="/get-involved">Learn how to get involved →</a></p>
+    </div>
+  </section>
+
+  <CtaBand title="Help us write the next chapter." text="Nominate a woman, sponsor the banquet, or make a gift to the scholarship fund.">
+    <a class="btn btn--light" href="/nominate">Nominate</a>
+    <a class="btn btn--coral" href="/donate">Donate</a>
+  </CtaBand>
+</Base>
+
+<style>
+  .timeline { display: grid; gap: 0; border-left: 2px solid var(--blush-2); padding-left: 1.5rem; }
+  .tl { position: relative; padding-bottom: 1.4rem; }
+  .tl::before { content: ""; position: absolute; left: calc(-1.5rem - 7px); top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--berry); box-shadow: 0 0 0 4px var(--cream); }
+  .tl__y { font-family: var(--font-display); font-weight: 700; color: var(--berry); font-size: 1.2rem; }
+  .tl p { margin: 0.1rem 0 0; color: var(--muted); }
+  .member { text-align: center; }
+  .member__photo { width: 160px; height: 160px; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, var(--coral), var(--berry)); display: grid; place-items: center; color: #fff; font-family: var(--font-display); font-size: 2rem; box-shadow: var(--shadow); }
+  .member__photo img { width: 100%; height: 100%; object-fit: cover; }
+  .member h3 { font-size: 1.15rem; margin-bottom: 0.1rem; }
+  .member p { color: var(--muted); font-size: 0.92rem; margin: 0; }
+</style>

@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+---
+<Base title="Page not found">
+  <PageHero eyebrow="404" title="We couldn't find that page" subtitle="The page may have moved when we redesigned the site. Try one of the links below.">
+    <div class="btn-row">
+      <a class="btn btn--primary" href="/">Home</a>
+      <a class="btn btn--outline" href="/women-of-the-year">Women of the Year</a>
+      <a class="btn btn--outline" href="/swan-scholarship">Scholarship</a>
+      <a class="btn btn--outline" href="/contact">Contact</a>
+    </div>
+  </PageHero>
+</Base>

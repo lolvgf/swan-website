@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import YearList from '../components/YearList.astro';
+import { getHonorees } from '../lib/site';
+
+const items = (await getHonorees()).filter((h) => ['woman-of-the-year', 'woman-of-recognition', 'humanitarian'].includes(h.data.award));
+const years = [...new Set(items.map((h) => h.data.year))];
+const decades = [...new Set(years.map((y) => Math.floor(y / 10) * 10))].sort((a, b) => b - a);
+---
+<Base title="Previous Women of the Year" description={`Every SWAN Woman of the Year since 1985, ${items.length} honorees and counting.`}>
+  <PageHero eyebrow="Honor roll" title="Previous Women of the Year" subtitle={`Since 1985, SWAN has honored ${items.length} women for their leadership, mentorship, and service to Skagit County.`} />
+
+  <section class="section section--tight">
+    <div class="container">
+      <nav class="jump" aria-label="Jump to decade">
+        {decades.map((d) => <a href={`#y${years.filter((y) => Math.floor(y / 10) * 10 === d)[0]}`}>{d}s</a>)}
+      </nav>
+      <YearList items={items} showAward />
+      <div class="btn-row mt-3">
+        <a class="btn btn--outline" href="/rising-swan">Rising Swan recipients</a>
+        <a class="btn btn--outline" href="/lifetime-achievement">Lifetime Achievement recipients</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .jump { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .jump a { padding: 0.4rem 0.9rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+  .jump a:hover { background: var(--berry); color: #fff; border-color: var(--berry); }
+</style>

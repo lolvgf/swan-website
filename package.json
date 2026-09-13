@@ -1,0 +1,25 @@
+{
+  "name": "swan-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sitio web de Skagit Women's Alliance and Network (SWAN)",
+  "scripts": {
+    "dev": "astro dev",
+    "cms": "concurrently -n web,cms -c magenta,cyan \"astro dev\" \"decap-server\"",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.5",
+    "astro": "^7.3.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "decap-server": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

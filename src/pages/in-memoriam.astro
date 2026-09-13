@@ -1,0 +1,44 @@
+---
+import { getEntry, getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { initials } from '../lib/site';
+
+const page = (await getEntry('pages', 'in-memoriam'))!;
+const { Content } = await render(page);
+const people = (await getCollection('memoriam')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
+---
+<Base title={page.data.title} description={page.data.subtitle}>
+  <PageHero eyebrow="Remembering" title={page.data.title} subtitle={page.data.subtitle} />
+
+  <section class="section">
+    <div class="container">
+      <div class="prose memo-text"><Content /></div>
+    </div>
+  </section>
+
+  <section class="section section--blush">
+    <div class="container">
+      <div class="people">
+        {people.map((p) => (
+          <figure class="person">
+            <div class="person__photo">
+              {p.data.photo ? <img src={p.data.photo} alt={p.data.name} loading="lazy" /> : <span>{initials(p.data.name)}</span>}
+            </div>
+            <figcaption><strong>{p.data.name}</strong>{p.data.years && <span>{p.data.years}</span>}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .memo-text { margin-inline: auto; }
+  .people { display: grid; gap: 2rem 1.2rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+  .person { margin: 0; text-align: center; }
+  .person__photo { width: 140px; height: 140px; margin: 0 auto 0.8rem; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, var(--coral), var(--berry)); display: grid; place-items: center; color: #fff; font-family: var(--font-display); font-size: 1.6rem; box-shadow: var(--shadow-sm); filter: saturate(0.85); }
+  .person__photo img { width: 100%; height: 100%; object-fit: cover; }
+  .person figcaption strong { display: block; font-family: var(--font-display); font-size: 1.1rem; color: var(--plum); }
+  .person figcaption span { color: var(--muted); font-size: 0.88rem; }
+</style>

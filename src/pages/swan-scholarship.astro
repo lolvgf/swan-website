@@ -1,0 +1,73 @@
+---
+import { getEntry, getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getSite, groupByYear } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'scholarship'))!;
+const { Content } = await render(page);
+const scholars = (await getCollection('scholars')).sort((a, b) => b.data.year - a.data.year || a.data.name.localeCompare(b.data.name));
+const groups = groupByYear(scholars);
+---
+<Base title={page.data.title} description={page.data.subtitle} image={page.data.heroImage}>
+  <PageHero eyebrow="Scholarship" title={page.data.title} subtitle={page.data.subtitle} image={page.data.heroImage}>
+    <div class="btn-row">
+      <a class="btn btn--coral" href={site.scholarshipFormEn} target="_blank" rel="noopener">Apply now (English)</a>
+      {site.scholarshipFormEs && <a class="btn btn--light" href={site.scholarshipFormEs} target="_blank" rel="noopener">Solicitud en español</a>}
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split">
+      <div class="prose"><Content /></div>
+      <div class="grid">
+        <div class="card">
+          <div class="card__icon">$</div>
+          <h3>Minimum $2,000 per year</h3>
+          <p>Awarded to two or more women who live or work in Skagit County.</p>
+        </div>
+        <div class="card">
+          <div class="card__icon">∞</div>
+          <h3>Applications year-round</h3>
+          <p>Consideration occurs annually by September; funds are distributed from October through the following August.</p>
+        </div>
+        <div class="card">
+          <div class="card__icon">♥</div>
+          <h3>Support the fund</h3>
+          <p>Your gift helps a Skagit County woman continue her education.</p>
+          <a class="btn btn--outline btn--sm" href={site.scholarshipDonateUrl ?? site.donateUrl} target="_blank" rel="noopener">Donate to the scholarship fund</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--blush">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">Honor roll</span><h2>Scholarship recipients</h2><p class="lead">{scholars.length} women have received a SWAN Scholarship since 2005.</p></div>
+      <div class="scholars">
+        {groups.map(([year, list]) => (
+          <div class="scholars__year">
+            <h3>{year}</h3>
+            <ul>{list.map((s) => <li>{s.data.name}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Ready to apply?" text="Applications are accepted year-round in English and Spanish.">
+    <a class="btn btn--light" href={site.scholarshipFormEn} target="_blank" rel="noopener">Apply now</a>
+    {site.scholarshipFormEs && <a class="btn btn--coral" href={site.scholarshipFormEs} target="_blank" rel="noopener">Solicitar en español</a>}
+  </CtaBand>
+</Base>
+
+<style>
+  .scholars { columns: 4 220px; column-gap: 2rem; }
+  .scholars__year { break-inside: avoid; margin-bottom: 1.6rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 1rem 1.2rem; }
+  .scholars__year h3 { color: var(--berry); font-size: 1.3rem; margin-bottom: 0.4rem; }
+  .scholars__year ul { list-style: none; margin: 0; padding: 0; }
+  .scholars__year li { padding: 0.2rem 0; border-top: 1px dashed var(--line); font-size: 0.95rem; }
+  .scholars__year li:first-child { border-top: 0; }
+</style>

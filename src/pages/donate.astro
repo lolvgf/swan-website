@@ -1,0 +1,43 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { getSite } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'donate'))!;
+const { Content } = await render(page);
+---
+<Base title={page.data.title} description={page.data.subtitle}>
+  <PageHero eyebrow="Donate" title={page.data.title} subtitle={page.data.subtitle}>
+    <div class="btn-row">
+      <a class="btn btn--coral" href={site.donateUrl} target="_blank" rel="noopener">Donate to SWAN</a>
+      <a class="btn btn--outline" href={site.scholarshipDonateUrl ?? site.donateUrl} target="_blank" rel="noopener">Donate to the scholarship fund</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split">
+      <div class="prose"><Content /></div>
+      <div class="grid">
+        <div class="card">
+          <div class="card__icon">♥</div>
+          <h3>General fund</h3>
+          <p>Supports the Women of the Year program, the Nomination Celebration, and the Legacy Celebration.</p>
+          <a class="btn btn--primary btn--sm" href={site.donateUrl} target="_blank" rel="noopener">Give now</a>
+        </div>
+        <div class="card">
+          <div class="card__icon">$</div>
+          <h3>Scholarship fund</h3>
+          <p>Helps women in Skagit County pursue an enhanced standing or competence in their businesses or professions.</p>
+          <a class="btn btn--primary btn--sm" href={site.scholarshipDonateUrl ?? site.donateUrl} target="_blank" rel="noopener">Give to scholarships</a>
+        </div>
+        <div class="card">
+          <div class="card__icon">✉</div>
+          <h3>Prefer to mail a check?</h3>
+          <p>Make it payable to <strong>{site.fullName}</strong> and send it to:<br />{site.mailingAddress.split('\n').map((l, i) => <>{i > 0 && <br />}{l}</>)}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

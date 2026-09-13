@@ -1,0 +1,69 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import HonoreeCard from '../components/HonoreeCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getSite, getHonorees } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'women-of-the-year'))!;
+const { Content } = await render(page);
+const woy = await getHonorees('woman-of-the-year');
+const latestYear = woy[0]?.data.year;
+const latest = woy.filter((h) => h.data.year === latestYear);
+
+const categories = [
+  ['Professional Achievement', 'They are an accomplished expert in their field and have remained successful both in their professional and business endeavors.'],
+  ['Mentorship of Women', 'They actively invest in the growth of other women. They are a proven mentor to the women of our communities.'],
+  ['Community Engagement', 'They have made an impact in their community, serving local charitable or non-profit groups and volunteering for events that enhance the quality of life in Skagit County.'],
+  ['Transformative Leadership', 'They contribute to efforts that enact social change toward a healthy and just community for all.'],
+];
+---
+<Base title={page.data.title} description={page.data.subtitle} image={page.data.heroImage}>
+  <PageHero eyebrow="Awards" title={page.data.title} subtitle={page.data.subtitle} image={page.data.heroImage}>
+    <div class="btn-row">
+      <a class="btn btn--coral" href="/nominate">Submit a nomination</a>
+      {site.ticketsUrl && <a class="btn btn--light" href={site.ticketsUrl} target="_blank" rel="noopener">{site.ticketsLabel ?? 'Get tickets'}</a>}
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="prose"><Content /></div>
+      <div class="grid grid--2 mt-3">
+        {categories.map(([name, text], i) => (
+          <div class="card">
+            <div class="card__icon">{i + 1}</div>
+            <h3>{name}</h3>
+            <p>{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {latest.length > 0 && (
+    <section class="section section--blush">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{latestYear} recipients</span>
+          <h2>{latestYear} Women of the Year</h2>
+        </div>
+        <div class="grid grid--2">
+          {latest.map((h) => <HonoreeCard {...h.data} />)}
+        </div>
+        <div class="btn-row mt-3">
+          <a class="btn btn--primary" href="/previous-woy">Previous Women of the Year</a>
+          <a class="btn btn--outline" href="/rising-swan">Rising Swan</a>
+          <a class="btn btn--outline" href="/lifetime-achievement">Lifetime Achievement</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBand title="Know a woman who deserves to be celebrated?" text="Nominations are accepted year-round. Nominees are contacted by August 10th each year.">
+    <a class="btn btn--light" href="/nominate">Nominate her</a>
+    <a class="btn btn--coral" href="/be-a-sponsor">Sponsor the banquet</a>
+  </CtaBand>
+</Base>

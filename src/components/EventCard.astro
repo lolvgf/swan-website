@@ -1,0 +1,37 @@
+---
+import { formatDate } from '../lib/site';
+interface Props { title: string; date: Date; time?: string; location?: string; image?: string; ctaLabel?: string; ctaUrl?: string; past?: boolean }
+const { title, date, time, location, image, ctaLabel, ctaUrl, past = false } = Astro.props;
+---
+<article class:list={['event', { 'event--past': past }]}>
+  {image && <div class="event__img"><img src={image} alt="" loading="lazy" /></div>}
+  <div class="event__body">
+    <div class="event__date">
+      <span class="event__day">{date.getUTCDate()}</span>
+      <span class="event__mon">{date.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })}</span>
+    </div>
+    <div>
+      {past && <span class="pill">Past event</span>}
+      <h3>{title}</h3>
+      <p class="event__meta">{formatDate(date)}{time && ` · ${time}`}{location && <><br />{location}</>}</p>
+      <div class="event__text"><slot /></div>
+      {ctaUrl && !past && <a class="btn btn--primary btn--sm" href={ctaUrl} target="_blank" rel="noopener">{ctaLabel ?? 'Learn more'}</a>}
+    </div>
+  </div>
+</article>
+
+<style>
+  .event { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: grid; grid-template-columns: minmax(0, 300px) 1fr; box-shadow: var(--shadow-sm); }
+  .event__img { background: var(--blush); }
+  .event__img img { width: 100%; height: 100%; object-fit: contain; aspect-ratio: 4/5; }
+  .event__body { display: grid; grid-template-columns: 72px 1fr; gap: 1.2rem; padding: clamp(1.2rem, 3vw, 2rem); align-items: start; }
+  .event__date { text-align: center; background: var(--blush); border-radius: 12px; padding: 0.5rem 0.3rem; }
+  .event__day { display: block; font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--berry); line-height: 1; }
+  .event__mon { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--plum); margin-top: 0.2rem; }
+  .event__meta { color: var(--muted); font-size: 0.95rem; }
+  .event__text :global(p:last-child) { margin-bottom: 1.2rem; }
+  .event--past { opacity: 0.85; }
+  .event--past h3 { margin-top: 0.4rem; }
+  @media (max-width: 760px) { .event { grid-template-columns: 1fr; } .event__img img { aspect-ratio: 16/10; } }
+  @media (max-width: 480px) { .event__body { grid-template-columns: 1fr; } .event__date { display: none; } }
+</style>

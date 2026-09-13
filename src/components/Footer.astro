@@ -1,0 +1,82 @@
+---
+import type { SiteSettings } from '../lib/site';
+interface Props { site: SiteSettings }
+const { site } = Astro.props;
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="/images/logo.png" alt={site.fullName} width="200" height="75" />
+        <p>{site.description}</p>
+        <div class="social">
+          {site.facebook && <a href={site.facebook} target="_blank" rel="noopener" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.5 1.6-1.5h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8h3.3z"/></svg></a>}
+          {site.linkedin && <a href={site.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.9 8.5H3.6V20h3.3V8.5zM5.3 3.5a1.9 1.9 0 100 3.8 1.9 1.9 0 000-3.8zM20.4 13.1c0-3.3-1.8-4.9-4.2-4.9-1.9 0-2.8 1-3.3 1.8V8.5H9.6V20h3.3v-6c0-1.6.3-3.1 2.3-3.1 1.9 0 1.9 1.8 1.9 3.2V20h3.3v-6.9z"/></svg></a>}
+        </div>
+      </div>
+
+      <div>
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="/women-of-the-year">Women of the Year</a></li>
+          <li><a href="/rising-swan">Rising Swan</a></li>
+          <li><a href="/lifetime-achievement">Lifetime Achievement</a></li>
+          <li><a href="/swan-scholarship">SWAN Scholarship</a></li>
+          <li><a href="/previous-woy">Previous honorees</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get involved</h4>
+        <ul>
+          <li><a href="/nominate">Nominate</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/be-a-sponsor">Be a sponsor</a></li>
+          <li><a href="/donate">Donate</a></li>
+          <li><a href="/get-involved">Volunteer</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Stay connected</h4>
+        <p class="small"><a href={`mailto:${site.email}`}>{site.email}</a><br />
+          {site.mailingAddress.split('\n').map((l, i) => <>{i > 0 && <br />}{l}</>)}</p>
+        {site.newsletterAction && (
+          <form action={site.newsletterAction} method="post" target="_blank" class="newsletter">
+            <label for="mce-EMAIL" class="visually-hidden">Email address</label>
+            <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Your email" required />
+            <div style="position:absolute;left:-5000px" aria-hidden="true"><input type="text" name="b_2a5a297c86446e36aa8e8e5bd_641266ef35" tabindex="-1" value="" /></div>
+            <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
+          </form>
+        )}
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© {year} {site.fullName}. A 501(c)(3) non-profit organization.</span>
+      <span><a href="/contact">Contact</a> · <a href="/in-memoriam">In Memoriam</a> · <a href="/admin/" rel="nofollow">Site admin</a></span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: #fff; border-top: 1px solid var(--line); padding-block: clamp(3rem, 6vw, 4.5rem) 1.5rem; margin-top: 2rem; }
+  .footer__grid { display: grid; gap: 2.5rem; grid-template-columns: 1.6fr 1fr 1fr 1.4fr; }
+  .footer__brand img { width: 180px; margin-bottom: 1rem; }
+  .footer__brand p { color: var(--muted); font-size: 0.95rem; max-width: 36ch; }
+  .footer h4 { font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--berry); margin-bottom: 0.9rem; }
+  .footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+  .footer ul a, .footer .small a { color: var(--ink); text-decoration: none; font-size: 0.95rem; }
+  .footer ul a:hover { color: var(--berry); }
+  .small { font-size: 0.92rem; color: var(--muted); }
+  .social { display: flex; gap: 0.5rem; }
+  .social a { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--blush); color: var(--berry); }
+  .social a:hover { background: var(--berry); color: #fff; }
+  .newsletter { display: flex; gap: 0.5rem; flex-wrap: wrap; position: relative; }
+  .newsletter input { flex: 1 1 150px; min-width: 0; padding: 0.7rem 0.9rem; border: 1px solid var(--line); border-radius: 999px; font: inherit; font-size: 0.95rem; }
+  .footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.6rem; margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-size: 0.85rem; color: var(--muted); }
+  .footer__bottom a { color: var(--muted); }
+  @media (max-width: 900px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .footer__grid { grid-template-columns: 1fr; } }
+</style>

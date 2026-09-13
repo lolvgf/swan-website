@@ -1,0 +1,21 @@
+# Render Blueprint – https://render.com/docs/blueprint-spec
+# Al conectar el repo en Render con "New > Blueprint", se crea este servicio automáticamente.
+services:
+  - type: web
+    name: swan-website
+    runtime: node
+    plan: free            # cambia a "starter" para que el sitio no se "duerma" tras 15 min sin visitas
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeploy: true      # cada cambio guardado en /admin (commit en GitHub) vuelve a publicar el sitio
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: HOST
+        value: 0.0.0.0
+      # Credenciales de la GitHub OAuth App para el login del panel /admin (ver README).
+      - key: OAUTH_GITHUB_CLIENT_ID
+        sync: false
+      - key: OAUTH_GITHUB_CLIENT_SECRET
+        sync: false

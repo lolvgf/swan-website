@@ -1,0 +1,11 @@
+{
+  "intro": "Skagit Women's Alliance and Network (SWAN) has been celebrating and honoring Skagit County women for over 40 years for their successes and contributions to the community as business leaders, mentors, innovators, and visionaries. We are excited to continue our tradition of recognizing multiple award recipients at the SWAN Women of the Year Awards Ceremony & Banquet on the third Thursday in October at the Swinomish Casino and Lodge.\n\nYour sponsorship will help us recognize women of Skagit County for their accomplishments and may aid us in providing scholarships for women continuing their education to enhance their chosen professions.",
+  "levels": [
+    { "name": "Leadership", "amount": 2000, "featured": true, "perks": ["Ongoing acknowledgment in media including website, social media, and publications", "Display ad on event slide deck during banquet", "Display ad on website for one year and social media recognition", "Recognition in event program", "Four (4) complimentary banquet tickets"] },
+    { "name": "Charter", "amount": 750, "featured": false, "perks": ["Display ad on event slide deck during banquet", "Display ad on website for one year and social media recognition", "Recognition in event program", "Two (2) complimentary banquet tickets"] },
+    { "name": "Mentor", "amount": 500, "featured": false, "perks": ["Display ad on event slide deck during banquet", "Display ad on website for one year and social media recognition", "Recognition in event program"] },
+    { "name": "Supporter", "amount": 350, "featured": false, "perks": ["Company logo in event slide deck during banquet", "Social media recognition", "Recognition in event program"] },
+    { "name": "Partner", "amount": 200, "featured": false, "perks": ["Business or personal recognition in event program"] }
+  ],
+  "otherNote": "To contribute an amount not listed above, click Donate and enter the amount you would like to give. Your sponsorship level will be determined by rounding down your amount to the nearest sponsor level. For example, a $375 contribution is a Supporter level sponsorship and a $1,000 contribution is a Charter level sponsorship."
+}

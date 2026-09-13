@@ -1,0 +1,33 @@
+---
+import { initials, AWARD_LABELS } from '../lib/site';
+interface Props { name: string; year?: number; category?: string; title?: string; photo?: string; award?: string; showAward?: boolean; compact?: boolean; showYear?: boolean }
+const { name, year, category, title, photo, award, showAward = false, compact = false, showYear = true } = Astro.props;
+---
+<article class:list={['honoree', { 'honoree--compact': compact }]}>
+  <div class="honoree__avatar">
+    {photo ? <img src={photo} alt={name} loading="lazy" /> : <span aria-hidden="true">{initials(name)}</span>}
+  </div>
+  <div class="honoree__body">
+    <div class:list={["honoree__meta", { "honoree__meta--empty": !(year && showYear) && !(showAward && award) }]}>
+      {year && showYear && <span class="pill">{year}</span>}
+      {showAward && award && <span class="pill pill--plum">{AWARD_LABELS[award] ?? award}</span>}
+    </div>
+    <h3 class="honoree__name">{name}</h3>
+    {category && <p class="honoree__cat">{category}</p>}
+    {title && <p class="honoree__title">{title}</p>}
+  </div>
+</article>
+
+<style>
+  .honoree { display: flex; gap: 1rem; align-items: flex-start; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem; }
+  .honoree__avatar { flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: linear-gradient(135deg, var(--coral), var(--berry)); color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; }
+  .honoree__avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .honoree__meta { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+  .honoree__meta--empty { display: none; }
+  .honoree__name { font-size: 1.15rem; margin: 0 0 0.2rem; }
+  .honoree__cat { color: var(--berry); font-weight: 700; font-size: 0.88rem; margin: 0 0 0.2rem; }
+  .honoree__title { color: var(--muted); font-size: 0.9rem; margin: 0; }
+  .honoree--compact { padding: 0.8rem; }
+  .honoree--compact .honoree__avatar { flex-basis: 48px; width: 48px; height: 48px; font-size: 1rem; }
+  .honoree--compact .honoree__name { font-size: 1.02rem; }
+</style>

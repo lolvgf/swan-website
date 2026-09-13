@@ -1,0 +1,49 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getSite } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'volunteer'))!;
+const { Content } = await render(page);
+const subject = encodeURIComponent('Volunteering with SWAN');
+const body = encodeURIComponent('Hi SWAN,\n\nI would like to volunteer. Here is my availability and my interests:\n\n');
+---
+<Base title={page.data.title} description={page.data.subtitle}>
+  <PageHero eyebrow="Volunteer" title={page.data.title} subtitle={page.data.subtitle} />
+
+  <section class="section">
+    <div class="container split">
+      <div class="prose"><Content /></div>
+      <div class="grid">
+        <div class="card">
+          <div class="card__icon">B</div>
+          <h3>Join the Board of Directors</h3>
+          <p>Download the application, fill it out, and email it to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+          {site.boardApplicationFile && <a class="btn btn--primary btn--sm" href={site.boardApplicationFile} target="_blank" rel="noopener">Board application (PDF)</a>}
+        </div>
+        <div class="card">
+          <div class="card__icon">V</div>
+          <h3>Volunteer at an event</h3>
+          <p>Tell us your availability and interests and we will match you with one of our projects.</p>
+          <a class="btn btn--outline btn--sm" href={`mailto:${site.email}?subject=${subject}&body=${body}`}>Email us to volunteer</a>
+        </div>
+        <div class="card">
+          <div class="card__icon">S</div>
+          <h3>Sponsor or donate</h3>
+          <p>Sponsor the Women of the Year Banquet or give to the scholarship fund.</p>
+          <div class="btn-row">
+            <a class="btn btn--outline btn--sm" href="/be-a-sponsor">Sponsorships</a>
+            <a class="btn btn--outline btn--sm" href="/donate">Donate</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Every hand helps." text="From the Nomination Celebration in August to the banquet in October, there is a place for you.">
+    <a class="btn btn--light" href={`mailto:${site.email}?subject=${subject}`}>Get in touch</a>
+  </CtaBand>
+</Base>

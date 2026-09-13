@@ -1,0 +1,64 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getSite, getSponsorship } from '../lib/site';
+
+const site = await getSite();
+const page = (await getEntry('pages', 'sponsor'))!;
+const sponsorship = await getSponsorship();
+const money = (n: number) => `$${n.toLocaleString('en-US')}`;
+---
+<Base title={page.data.title} description={page.data.subtitle} image={page.data.heroImage}>
+  <PageHero eyebrow="Sponsorship" title={page.data.title} subtitle={page.data.subtitle} image={page.data.heroImage}>
+    <div class="btn-row"><a class="btn btn--coral" href={site.donateUrl} target="_blank" rel="noopener">Become a sponsor</a></div>
+  </PageHero>
+
+  <section class="section section--tight">
+    <div class="container split">
+      <div class="prose">{sponsorship.intro.split('\n\n').map((p) => <p>{p}</p>)}</div>
+      <figure class="frame sponsors-wall">
+        <img src="/images/banquet-group.jpg" alt="Logos of the sponsors of the most recent Women of the Year Banquet" loading="lazy" />
+        <figcaption>Thank you to the sponsors of our most recent banquet.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section--blush">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">Sponsorship levels</span><h2>Choose your level</h2></div>
+      <div class="levels">
+        {sponsorship.levels.map((l) => (
+          <article class:list={['level', { 'level--featured': l.featured }]}>
+            {l.featured && <span class="pill pill--plum">Top sponsor</span>}
+            <h3>{l.name}</h3>
+            <p class="level__amount">{money(l.amount)}</p>
+            <ul>{l.perks.map((p) => <li>{p}</li>)}</ul>
+            <a class:list={['btn', 'btn--sm', l.featured ? 'btn--primary' : 'btn--outline']} href={site.donateUrl} target="_blank" rel="noopener">Sponsor at {l.name}</a>
+          </article>
+        ))}
+      </div>
+      <div class="card mt-3">
+        <h3>Other amounts</h3>
+        <p>{sponsorship.otherNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Sponsor the SWAN Scholarship Fund." text="Help a Skagit County woman continue her education.">
+    <a class="btn btn--light" href={site.scholarshipDonateUrl ?? site.donateUrl} target="_blank" rel="noopener">Give to the scholarship fund</a>
+  </CtaBand>
+</Base>
+
+<style>
+  .sponsors-wall { margin: 0; background: #fff; }
+  .sponsors-wall figcaption { padding: 0.7rem 1rem; font-size: 0.85rem; color: var(--muted); text-align: center; }
+  .levels { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); align-items: start; }
+  .level { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; display: flex; flex-direction: column; gap: 0.6rem; height: 100%; }
+  .level--featured { border-color: var(--berry); box-shadow: var(--shadow); }
+  .level h3 { margin: 0.4rem 0 0; }
+  .level__amount { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--berry); margin: 0; }
+  .level ul { padding-left: 1.1rem; margin: 0 0 0.8rem; color: var(--muted); font-size: 0.93rem; flex: 1; }
+  .level li { margin-bottom: 0.35rem; }
+</style>
