@@ -23,7 +23,7 @@ export type SiteSettings = {
   ticketsUrl?: string; ticketsLabel?: string;
   nominationFormEn: string; nominationFormEs?: string; nominationsOpen?: boolean; nominationsDeadline?: string;
   scholarshipFormEn: string; scholarshipFormEs?: string;
-  boardApplicationFile?: string; newsletterAction?: string;
+  boardApplicationForm?: string; boardApplicationFile?: string; newsletterAction?: string;
   announcement?: string; announcementLink?: string; announcementLinkLabel?: string;
 };
 

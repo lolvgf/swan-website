@@ -21,8 +21,17 @@ const body = encodeURIComponent('Hi SWAN,\n\nI would like to volunteer. Here is 
         <div class="card">
           <div class="card__icon">B</div>
           <h3>Join the Board of Directors</h3>
-          <p>Download the application, fill it out, and email it to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
-          {site.boardApplicationFile && <a class="btn btn--primary btn--sm" href={site.boardApplicationFile} target="_blank" rel="noopener">Board application (PDF)</a>}
+          {site.boardApplicationForm ? (
+            <>
+              <p>Fill out the online application. Questions? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+              <a class="btn btn--primary btn--sm" href={site.boardApplicationForm} target="_blank" rel="noopener">Board application</a>
+            </>
+          ) : (
+            <>
+              <p>Download the application, fill it out, and email it to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+              {site.boardApplicationFile && <a class="btn btn--primary btn--sm" href={site.boardApplicationFile} target="_blank" rel="noopener">Board application (PDF)</a>}
+            </>
+          )}
         </div>
         <div class="card">
           <div class="card__icon">V</div>

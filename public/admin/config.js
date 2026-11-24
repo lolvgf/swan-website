@@ -67,6 +67,7 @@ var config = {
             { name: 'nominationsDeadline', label: 'Nominations deadline (text)', widget: 'string', required: false, hint: 'e.g. June 30' },
             { name: 'scholarshipFormEn', label: 'Scholarship application (English)', widget: 'string' },
             { name: 'scholarshipFormEs', label: 'Scholarship application (Spanish)', widget: 'string', required: false },
+            { name: 'boardApplicationForm', label: 'Board application (online form URL)', widget: 'string', required: false, hint: 'If set, the button opens this form instead of the PDF.' },
             { name: 'boardApplicationFile', label: 'Board application (PDF path)', widget: 'string', required: false },
             { name: 'newsletterAction', label: 'Mailchimp form URL', widget: 'string', required: false },
             { name: 'announcement', label: 'Announcement bar text', widget: 'string', required: false, hint: 'Leave empty to hide the bar at the top of every page.' },
